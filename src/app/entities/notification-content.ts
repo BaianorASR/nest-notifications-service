@@ -1,5 +1,5 @@
 export class NotificationContent {
-  private readonly content: string;
+  private content: string;
 
   get value(): string {
     return this.content;
