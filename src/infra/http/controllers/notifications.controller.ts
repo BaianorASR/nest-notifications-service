@@ -1,9 +1,9 @@
 import { Body, Controller, Post } from '@nestjs/common';
 
 import { CreateNotificationsDto } from '../dtos/create-notifications.dto';
+import { NotificationViewModel } from '../view-models/notification.view-model';
 
 import { SendNotification } from '@app/use-cases/send-notification.use-case';
-import { Notification } from '@app/entities/notification.entity';
 
 @Controller()
 export class NotificationsController {
@@ -12,13 +12,15 @@ export class NotificationsController {
   @Post()
   async create(
     @Body() { recipientId, content, category }: CreateNotificationsDto,
-  ): Promise<Notification> {
+  ) {
     const { notification } = await this.sendNotification.execute({
       recipientId,
       content,
       category,
     });
 
-    return notification;
+    return {
+      notification: NotificationViewModel.toHTTP(notification),
+    };
   }
 }
