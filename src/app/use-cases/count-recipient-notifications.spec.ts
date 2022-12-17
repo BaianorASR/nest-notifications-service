@@ -6,15 +6,18 @@ import { InMemoryNotificationsRepository } from '@test/repositories/in-memory-no
 
 describe('CounterRecipientNotificationsUseCase', () => {
   let notificationsRepository: NotificationsRepository;
-  let useCase: CounterRecipientNotificationsUseCase;
+  let counterRecipientNotificationsUseCase: CounterRecipientNotificationsUseCase;
 
   beforeEach(() => {
     notificationsRepository = new InMemoryNotificationsRepository();
-    useCase = new CounterRecipientNotificationsUseCase(notificationsRepository);
+    counterRecipientNotificationsUseCase =
+      new CounterRecipientNotificationsUseCase(notificationsRepository);
   });
 
   it('should be able to return 0 if there are no notifications for the recipient', async () => {
-    const { count } = await useCase.execute({ recipientId: 'recipient-123' });
+    const { count } = await counterRecipientNotificationsUseCase.execute({
+      recipientId: 'recipient-123',
+    });
 
     expect(count).toEqual(0);
   });
@@ -27,7 +30,9 @@ describe('CounterRecipientNotificationsUseCase', () => {
     await notificationsRepository.create(notification2);
     await notificationsRepository.create(notification1);
 
-    const { count } = await useCase.execute({ recipientId: 'recipient-123' });
+    const { count } = await counterRecipientNotificationsUseCase.execute({
+      recipientId: 'recipient-123',
+    });
 
     expect(count).toEqual(2);
   });

@@ -14,10 +14,16 @@ export class InMemoryNotificationsRepository
     return notification || null;
   }
 
-  async countManyByRecipientId(recipientId: string): Promise<number> {
+  async findManyByRecipientId(recipientId: string): Promise<Notification[]> {
     return this.notifications.filter(
       (notification) => notification.recipientId === recipientId,
-    ).length;
+    );
+  }
+
+  async countManyByRecipientId(recipientId: string): Promise<number> {
+    return this.findManyByRecipientId(recipientId).then(
+      (notifications) => notifications.length,
+    );
   }
 
   async create(notification: Notification): Promise<void> {
