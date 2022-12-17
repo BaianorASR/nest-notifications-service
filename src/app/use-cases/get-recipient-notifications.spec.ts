@@ -30,6 +30,12 @@ describe('GetRecipientNotificationsUseCase', () => {
     });
 
     expect(notifications).toHaveLength(2);
+    expect(notifications).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ recipientId }),
+        expect.objectContaining({ recipientId }),
+      ]),
+    );
   });
 
   it('should be able to return an empty array if there are no notifications for the recipient', async () => {

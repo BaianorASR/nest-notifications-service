@@ -60,8 +60,12 @@ export class Notification {
     return this.props.readAt ?? null;
   }
 
-  public set readAt(date: Date | null) {
-    this.props.readAt = date;
+  public read(): void {
+    this.props.readAt = new Date();
+  }
+
+  public unread(): void {
+    this.props.readAt = null;
   }
 
   public get cancelAt(): Date | null {
