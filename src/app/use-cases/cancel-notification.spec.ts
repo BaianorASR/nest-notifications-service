@@ -5,7 +5,7 @@ import { NotificationNotFoundError } from './errors/notification-not-fount.error
 
 import { InMemoryNotificationsRepository } from '@test/repositories/in-memory-notifications.repository';
 import { Notification } from '@app/entities/notification.entity';
-import { NotificationContent } from '@app/entities/notification-content';
+import { makeNotification } from '@test/factories/make-notification';
 
 describe('Cancel notification', () => {
   const notificationsRepository = new InMemoryNotificationsRepository();
@@ -19,11 +19,10 @@ describe('Cancel notification', () => {
       notificationsRepository,
     );
 
-    const notification = new Notification({
-      recipientId: randomUUID(),
-      content: new NotificationContent('This is a test notification'),
-      category: 'social',
-    });
+    jest.spyOn(Notification.prototype, 'cancel');
+    jest.spyOn(notificationsRepository, 'save');
+
+    const notification = makeNotification();
 
     await notificationsRepository.create(notification);
 
@@ -31,6 +30,8 @@ describe('Cancel notification', () => {
       notificationId: notification.id,
     });
 
+    expect(notification.cancel).toHaveBeenCalled();
+    expect(notificationsRepository.save).toHaveBeenCalledWith(notification);
     expect(notificationsRepository.notifications[0].cancelAt).toEqual(
       expect.any(Date),
     );
